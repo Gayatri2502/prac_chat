@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "95909987915",
+    "project_id": "prac-chat-28b84",
+    "storage_bucket": "prac-chat-28b84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95909987915:android:426bf21c2cca053f53afce",
+        "android_client_info": {
+          "package_name": "com.example.prac_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95909987915-qu63p9u60fpbohtk2prae34ntcvfthl6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfYirF8rScbKY34ZgnGb-EEcBEcqMr0aI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95909987915-2hidb6o356h807s807egpaijv7pqju1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
