@@ -50,28 +50,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               height: 40,
             ),
             ElevatedButton(
-
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const AuthScreen();
-                }));
-              },
-
-              style: ElevatedButton.styleFrom(
-
-                backgroundColor: Colors.teal.shade100,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  // set the circular radius
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const AuthScreen();
+                  }));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal.shade100,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    // set the circular radius
+                  ),
                 ),
-            ),
-              child:  Text(
-                "AGREE AND CONTINUE",
-                style: CustomizedTextStyle.medium,
-
-              )
-            )],
+                child: Text(
+                  "AGREE AND CONTINUE",
+                  style: CustomizedTextStyle.medium,
+                ))
+          ],
         )),
       ),
     );

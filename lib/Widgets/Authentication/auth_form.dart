@@ -13,6 +13,7 @@ class AuthForm extends StatefulWidget {
     super.key,
     this.uid,
   });
+
   final String? uid;
 
   @override
@@ -34,30 +35,30 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _userConfirmPasswordController =
       TextEditingController();
 
-  void saveSubmit() {
-    final isValid = _formKey.currentState!.validate();
+  Future<void> saveSubmit() async {
+    /*final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
-    }
-    FirebaseAuth.instance
+    }*/
+    print("Save Submit");
+    await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
             email: _userEmailController.text,
             password: _userPasswordController.text)
-        .then((value) {
-          FocusScope.of(context).unfocus();
-
-          FirebaseFirestore.instance
-              .collection("Users")
-              .doc(_userEmailController.text)
-              .set({
-            "Name": _userNameController,
-            "Email": _userEmailController,
-            "Password": _userPasswordController,
-            "PhoneNumber": _userPhoneNumberController
-          });
-        })
-        .then((value) => print("UserAdded: "))
-        .catchError((e) => print("failed to add user"));
+        .then((value) async {
+      print("User Added");
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(_userEmailController.text)
+          .set({
+        "Name": _userNameController.text,
+        "Email": _userEmailController.text,
+        "Password": _userPasswordController.text,
+        "PhoneNumber": _userPhoneNumberController.text
+      }).then((value) {
+        print("User Added to Database");
+      });
+    });
   }
 
   // create() async {
@@ -195,7 +196,7 @@ class _AuthFormState extends State<AuthForm> {
                           if (!_isLogin)
                             TextFormField(
                                 validator: (value) {
-                                  if (value != _userPasswordController) {
+                                  if (value != _userPasswordController.text) {
                                     return ("Entered Password do not match");
                                   }
                                   return null;
@@ -211,15 +212,14 @@ class _AuthFormState extends State<AuthForm> {
                           // if (isLoading)
                           ElevatedButton(
                               onPressed: () {
-                                saveSubmit();
+                                print("On Pressed Called");
+                                saveSubmit().then((value) {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return const HomeScreen();
+                                  }));
+                                });
                                 // create();
-                                const SizedBox(height: 25);
-                                if (isLoading)
-                                  const CircularProgressIndicator();
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return const HomeScreen();
-                                }));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal.shade900,
