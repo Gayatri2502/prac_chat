@@ -1,28 +1,50 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prac_chat/Models/message_model.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../Models/user_model.dart';
 
 class NewMessages extends StatefulWidget {
-  const NewMessages({Key? key}) : super(key: key);
+  final String channelId;
+
+  NewMessages({Key? key, required this.channelId}) : super(key: key);
 
   @override
   State<NewMessages> createState() => _NewMessagesState();
 }
 
 class _NewMessagesState extends State<NewMessages> {
-  var _enteredMessage = " ";
   final _controller = TextEditingController();
+  late DateTime date;
 
-  void _sendMessage() async {
+
+
+
+  void _sendMessage(MessageModel mesg) async {
     FocusScope.of(context).unfocus();
-    final user = FirebaseAuth.instance.currentUser!;
-    FirebaseFirestore.instance.collection('Chats').add({
-      'text': _enteredMessage,
-      'createdAt': Timestamp.now(),
-      'userId': user.uid
-    });
+
+    print("mesg is being added");
+
+    await FirebaseFirestore.instance
+        .collection("Chatting-Channel")
+        .doc(widget.channelId)
+        .collection("Messages")
+        .doc(mesg.mesgId)
+        .set(mesg.toJson());
     _controller.clear();
   }
+
+  //Collection "Chats"
+  //Doc "Channel id"
+  //Collection "Messages"
+  //Doc "Message Id"
+  //set(MessageModel.toJson)
+  //MessgeModel
+  /*String id, String message, String? imagelink, UserModel sender, DateTime sentat, List<UserModel> readBy*/
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +74,6 @@ class _NewMessagesState extends State<NewMessages> {
                   Icons.camera_alt,
                   color: Colors.black,
                 )),
-            onChanged: (value) {
-              setState(() {
-                _enteredMessage = value;
-              });
-            },
           )),
           // IconButton(
           //     onPressed: () {}, icon: const Icon(Icons.insert_link_rounded)),
@@ -64,11 +81,26 @@ class _NewMessagesState extends State<NewMessages> {
           //     onPressed: () {}, icon: const Icon(Icons.currency_rupee_rounded)),
           // IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt)),
           IconButton(
-              onPressed: _enteredMessage.trim().isEmpty
-                  ? null
-                  : () {
-                      _sendMessage();
-                    },
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('Users')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .get()
+                    .then((value) {
+                  UserModel currentUser =
+                      UserModel.fromJson(jsonDecode(jsonEncode(value.data())));
+                  var uuid = const Uuid();
+                  var newMesgID = uuid.v4();
+                  _sendMessage(MessageModel(
+                    mesgId: newMesgID,
+                    message: _controller.text,
+                    imageLink: '',
+                    sentAt: DateTime.now(),
+                    sentBy: currentUser,
+                    seenBy: [currentUser],
+                  ));
+                });
+              },
               icon: const Icon(
                 Icons.send,
                 color: Colors.black,

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:prac_chat/Constants/fonts.dart';
+import 'package:prac_chat/Models/user_model.dart';
 import 'package:prac_chat/Screens/auth_screen.dart';
+import 'package:prac_chat/Widgets/Authentication/login.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
-
+  const WelcomeScreen({
+    Key? key,
+  }) : super(key: key);
+  // UserModel user;
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
@@ -21,12 +25,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: SizedBox(
             child: Column(
           children: [
+            const SizedBox(
+              height: 60,
+            ),
             Padding(
               padding: MediaQuery.of(context).padding,
               child: Text(
                 'Welcome to WhatsApp',
                 style: CustomizedTextStyle.regular,
               ),
+            ),
+            const SizedBox(
+              height: 40,
             ),
             Container(
               alignment: Alignment.center,
@@ -39,6 +49,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       image: NetworkImage(
                           'https://mytraining.global/app/uploads/2021/07/Icon-Comp.png'))),
             ),
+            const SizedBox(
+              height: 40,
+            ),
             Padding(
                 padding: MediaQuery.of(context).padding,
                 child: Text(
@@ -47,26 +60,39 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   textAlign: TextAlign.center,
                 )),
             const SizedBox(
-              height: 40,
+              height: 70,
             ),
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return const AuthScreen();
+                    return LogIn();
                   }));
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal.shade100,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    // set the circular radius
-                  ),
+                // style: ElevatedButton.styleFrom(
+                //   backgroundColor: Colors.teal.shade100,
+                //   shape: RoundedRectangleBorder(
+                //
+                //     borderRadius: BorderRadius.circular(15),
+                //     // set the circular radius
+                //   ),
+                // ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.tealAccent.shade400),
+                  fixedSize:
+                      MaterialStateProperty.all<Size>(const Size(310, 60)),
                 ),
-                child: Text(
-                  "AGREE AND CONTINUE",
-                  style: CustomizedTextStyle.medium,
-                ))
+                child: const Text("AGREE & CONTINUE",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto-Bold',
+                      color: Colors.black,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 1,
+                      wordSpacing: 2.0,
+                    )))
           ],
         )),
       ),

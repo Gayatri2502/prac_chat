@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
     return  const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'WhatsApp',
-        home : WelcomeScreen()
+        home : const WelcomeScreen()
     );
   }
 }
