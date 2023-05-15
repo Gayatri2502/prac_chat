@@ -1,25 +1,49 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prac_chat/Screens/call_screen.dart';
+import 'package:prac_chat/Screens/camera_screen.dart';
 import 'package:prac_chat/Screens/profile_screen.dart';
+import 'package:prac_chat/Screens/status_screen.dart';
 import 'package:prac_chat/Widgets/Chat%20Cards/chat_cards.dart';
 
 import '../Constants/fonts.dart';
 import '../Models/user_model.dart';
+import 'chat_card_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key,
-
-   }) : super(key: key);
-   //UserModel currentUser ;
+  final List<CameraDescription> cameras;
+  HomeScreen({
+    Key? key, required this.cameras,
+  }) : super(key: key);
+  //UserModel currentUser ;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<UserModel> contactList = [];
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool showFab = true;
 
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(vsync: this, initialIndex: 1, length: 4);
+    _tabController.addListener(() {
+      if (_tabController.index == 1) {
+        showFab = true;
+      } else {
+        showFab = false;
+      }
+      setState(() {});
+    });
+  }
+
+
 
   // @override
   // void initState() {
@@ -38,59 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: firestore.collection('Users').snapshots(),
-        // firestore
-        //     .collection('Users')
-        //     .where('userId ' , isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        //     .snapshots(),
-
-        //List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
-
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-            case ConnectionState.none:
-              return const CircularProgressIndicator();
-            case ConnectionState.active:
-            case ConnectionState.done:
-              final data = snapshot.data?.docs;
-              contactList = data
-                      ?.map((e) =>
-                          UserModel.fromJson(e.data() as Map<String, dynamic>))
-                      .toList() ??
-                  [];
-
-              final int indexWhere = contactList.indexWhere((e) {
-                return e.userID == FirebaseAuth.instance.currentUser!.uid;
-              });
-
-              contactList.removeAt(indexWhere);
-          }
-          return Scaffold(
+    return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(100),
               child: AppBar(
                 backgroundColor: Colors.teal.shade800,
-                title: Column(
-                  children: [
-                    Container(
-                        alignment: Alignment.topLeft,
-                        child: const Text(
-                          "WhatsApp",
-                          textAlign: TextAlign.left,
-                        )),
-                    const SizedBox(height: 10),
-                  ],
-                ),
+                title: Text("WhatsApp"),
                 actions: [
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (
                           context,
                         ) {
-
-
                           return ProfileScreen();
                         }));
                       },
@@ -178,112 +161,124 @@ class _HomeScreenState extends State<HomeScreen> {
                     ];
                   })
                 ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(15),
-                  child: SizedBox(
-                    height: 40,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                // Handle item tap
-                              },
-                              child: Container(
-                                width: 80,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          width: 2, color: Colors.greenAccent)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.groups, color: Colors.white),
-                                    SizedBox(width: 15),
-                                    // Text('Home', style: TextStyle(fontSize: 16)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle item tap
-                              },
-                              child: SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    SizedBox(width: 25),
-                                    Text('Chats',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle item tap
-                              },
-                              child: SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    SizedBox(width: 40),
-                                    Text('Status',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle item tap
-                              },
-                              child: SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    SizedBox(width: 55),
-                                    Text('Calls',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                bottom: TabBar(
+                  controller: _tabController,
+                  indicatorColor: Colors.white,
+                  tabs: const <Widget>[
+                    Tab(icon: Icon(Icons.camera_alt)),
+                    Tab(text: "CHATS"),
+                    Tab(
+                      text: "STATUS",
                     ),
-                  ),
+                    Tab(
+                      text: "CALLS",
+                    ),
+                  ],
                 ),
+                // PreferredSize(
+                //   preferredSize: const Size.fromHeight(15),
+                //   child: SizedBox(
+                //     height: 40,
+                //     child: ListView(
+                //       scrollDirection: Axis.horizontal,
+                //       children: [
+                //         Row(
+                //           children: [
+                //             GestureDetector(
+                //               onTap: () {
+                //                 // Handle item tap
+                //               },
+                //               child: Container(
+                //                 width: 80,
+                //                 height: 40,
+                //                 decoration: const BoxDecoration(
+                //                   border: Border(
+                //                       bottom: BorderSide(
+                //                           width: 2, color: Colors.greenAccent)),
+                //                 ),
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: const [
+                //                     Icon(Icons.groups, color: Colors.white),
+                //                     SizedBox(width: 15),
+                //                     // Text('Home', style: TextStyle(fontSize: 16)),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //             GestureDetector(
+                //               onTap: () {
+                //                 // Handle item tap
+                //               },
+                //               child: SizedBox(
+                //                 width: 100,
+                //                 height: 40,
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: const [
+                //                     SizedBox(width: 25),
+                //                     Text('Chats',
+                //                         style: TextStyle(
+                //                             fontSize: 16, color: Colors.white)),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //             GestureDetector(
+                //               onTap: () {
+                //                 // Handle item tap
+                //               },
+                //               child: SizedBox(
+                //                 width: 100,
+                //                 height: 40,
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: const [
+                //                     SizedBox(width: 40),
+                //                     Text('Status',
+                //                         style: TextStyle(
+                //                             fontSize: 16, color: Colors.white)),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //             GestureDetector(
+                //               onTap: () {
+                //                 // Handle item tap
+                //               },
+                //               child: SizedBox(
+                //                 width: 100,
+                //                 height: 40,
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.center,
+                //                   children: const [
+                //                     SizedBox(width: 55),
+                //                     Text('Calls',
+                //                         style: TextStyle(
+                //                             fontSize: 16, color: Colors.white)),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ),
             ),
-            body: ListView.builder(
-                itemCount: contactList.length,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                ),
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return UserChatCards(
-                    user: contactList[index],
-                  );
-                  // return Text('$listOfUsers[index]');
-                }),
-            floatingActionButton: FloatingActionButton(
+            body: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                CameraScreen(widget.cameras),
+                const ChatCardScreen(),
+                const StatusScreen(),
+                const CallsScreen(),
+              ],
+
+            ),
+            floatingActionButton: showFab ? FloatingActionButton(
               backgroundColor: Colors.teal,
               onPressed: () {
                 FirebaseFirestore.instance
@@ -291,8 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     .add({'text': 'This was added by clicking the button'});
               },
               child: const Icon(Icons.add),
-            ),
+            ): null ,
           );
-        });
+
   }
 }

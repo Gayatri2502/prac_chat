@@ -14,7 +14,6 @@ class LogIn extends StatefulWidget {
   });
 
   final String? uid;
-  //UserModel currentUser;
 
   @override
   State<LogIn> createState() => _AuthFormState();
@@ -22,12 +21,10 @@ class LogIn extends StatefulWidget {
 
 class _AuthFormState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
-  bool _tapped = false;
-
+  bool _emailTapped = false;
+  bool _passwordTapped = false;
   bool _isLoading = false;
   var _text = '';
-
-  AuthServices authServices = AuthServices();
 
   final TextEditingController _userEmailController = TextEditingController();
   final TextEditingController _userPasswordController = TextEditingController();
@@ -48,10 +45,10 @@ class _AuthFormState extends State<LogIn> {
     final emailText = _userEmailController.value.text;
     final emailRegExpression = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
 
-    if (_tapped && emailText.isEmpty) {
+    if (_emailTapped && emailText.isEmpty) {
       return 'Can\'t be empty';
     }
-    if (_tapped && !emailRegExpression.hasMatch(emailText)) {
+    if (_emailTapped && !emailRegExpression.hasMatch(emailText)) {
       return 'Invalid Email Address';
     }
     // return null if the text is valid
@@ -68,7 +65,7 @@ class _AuthFormState extends State<LogIn> {
     // final passRegExpression = RegExp(
     //     r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
 
-    if (_tapped && passText.isEmpty) {
+    if (_passwordTapped && passText.isEmpty) {
       return 'Can\'t be empty';
     }
 
@@ -101,7 +98,7 @@ class _AuthFormState extends State<LogIn> {
           _isLoading = false;
           // _showAlertDialog();
         });
-      } else  {
+      } else {
         setState(() {
           _isLoading = true;
         });
@@ -114,7 +111,6 @@ class _AuthFormState extends State<LogIn> {
           print('Incorrect password');
           //_showAlertDialog();
         }
-
       }
     }
   }
@@ -165,11 +161,12 @@ class _AuthFormState extends State<LogIn> {
                             // },
                             onTap: () {
                               setState(() {
-                                _tapped = true;
+                                _emailTapped = true;
+                                _passwordTapped = false;
                               });
                             },
 
-                            onChanged: (text) => setState(() => _text),
+
                             keyboardType: TextInputType.emailAddress,
                             decoration: textInputDecoration.copyWith(
                               errorText: _errorTextEmail,
@@ -178,6 +175,7 @@ class _AuthFormState extends State<LogIn> {
                               prefixIconColor: Colors.black,
                             ),
                             controller: _userEmailController,
+                            onChanged: (text) => setState(() => _text),
                           ),
                           const SizedBox(
                             height: 40,
@@ -193,6 +191,12 @@ class _AuthFormState extends State<LogIn> {
                             //   }
                             //   return '';
                             // },
+                            onTap: () {
+                              setState(() {
+                                _emailTapped= false;
+                                _passwordTapped = true;
+                              });
+                            },
 
                             onChanged: (text) => setState(() => _text),
                             keyboardType: TextInputType.visiblePassword,
@@ -225,21 +229,9 @@ class _AuthFormState extends State<LogIn> {
                                 print("On Pressed Called");
                                 try {
                                   await logIn().then((value) {
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (context) => const Center(
-                                    //     child: CircularProgressIndicator(
-                                    //       valueColor:
-                                    //           AlwaysStoppedAnimation<Color>(
-                                    //               Colors.teal),
-                                    //     ),
-                                    //   ),
-                                    //   barrierDismissible: false,
-                                    // );
-
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
-                                      return HomeScreen();
+                                      return HomeScreen(cameras: [],);
                                     }));
                                   });
                                 } on FirebaseAuthException catch (e) {
@@ -258,8 +250,7 @@ class _AuthFormState extends State<LogIn> {
                                           content: SingleChildScrollView(
                                             child: ListBody(
                                               children: <Widget>[
-                                                Text(
-                                                    "${e.message}"),
+                                                Text("${e.message}"),
                                               ],
                                             ),
                                           ),
@@ -275,6 +266,7 @@ class _AuthFormState extends State<LogIn> {
                                       },
                                     );
                                   }
+
                                   return _showAlertDialog();
 
                                   // handle error
