@@ -1,34 +1,32 @@
+// ignore_for_file: unused_import
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prac_chat/Widgets/group_card/group_card.dart';
 import 'package:widget_loading/widget_loading.dart';
 
+import '../Models/group_model.dart';
 import '../Models/user_model.dart';
-import '../Widgets/Chat Cards/chat_cards.dart';
 
-class ChatCardScreen extends StatefulWidget {
-  const ChatCardScreen({Key? key}) : super(key: key);
+class GroupCardScreen extends StatefulWidget {
+  const GroupCardScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatCardScreen> createState() => _ChatCardScreenState();
+  State<GroupCardScreen> createState() => _GroupCardScreenState();
 }
 
-class _ChatCardScreenState extends State<ChatCardScreen> {
-  List<UserModel> contactList = [];
+class _GroupCardScreenState extends State<GroupCardScreen> {
+  List<GroupModel> groupList = [];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    isLoading = true;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: firestore.collection('Users').snapshots(),
+        stream: firestore
+            .collection('Groups')
+            .orderBy('sentAt', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -41,27 +39,27 @@ class _ChatCardScreenState extends State<ChatCardScreen> {
             case ConnectionState.active:
             case ConnectionState.done:
               final data = snapshot.data?.docs;
-              contactList = data
+              groupList = data
                       ?.map((e) =>
-                          UserModel.fromJson(e.data() as Map<String, dynamic>))
+                          GroupModel.fromJson(e.data() as Map<String, dynamic>))
                       .toList() ??
                   [];
 
-              // Remove the current user from the contactList
-              contactList.removeWhere((user) =>
-                  user.userID == FirebaseAuth.instance.currentUser!.uid);
+              // Remove the current user from the groupList
+              groupList.removeWhere((user) =>
+                  user.groupID == FirebaseAuth.instance.currentUser!.uid);
           }
           return ListView.builder(
-              itemCount: contactList.length,
+              itemCount: groupList.length,
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.02,
               ),
-              // physics: const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(1),
-                  child: UserChatCards(
-                    user: contactList[index],
+                  child: GroupChatCard(
+                    user: groupList[index],
                   ),
                 );
                 // return Text('$listOfUsers[index]');

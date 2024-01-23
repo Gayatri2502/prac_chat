@@ -1,10 +1,11 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthServices {
   late String? uid;
   late String? me;
-
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -59,28 +60,16 @@ class AuthServices {
 
   //UserExists
   Future<bool> userExists() async {
-    return (await firestore
-            .collection('Users')
-            .doc(user!.uid)
-            .get())
-        .exists;
+    return (await firestore.collection('Users').doc(user!.uid).get()).exists;
   }
-
-
-
-
-
 
   // get data of mine
 
-   Future myInfo(snapshot) async{
+  Future myInfo(snapshot) async {
     return await firestore
         .collection('Users')
         .doc(user!.uid)
-        .get().then((value) => {
-    });
+        .get()
+        .then((value) => {});
   }
-
-
-
 }

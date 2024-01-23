@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prac_chat/Constants/fonts.dart';
-import 'package:prac_chat/Models/user_model.dart';
-import 'package:prac_chat/Screens/auth_screen.dart';
 import 'package:prac_chat/Widgets/Authentication/login.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -17,11 +15,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.teal.shade900,
       body: Container(
-        padding: MediaQuery.of(context).padding,
+        padding: const EdgeInsets.all(16),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.teal.shade900,
         child: SizedBox(
             child: Column(
           children: [
@@ -36,12 +34,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(8.0),
-              height: 380,
+              height: 350,
               width: 300,
               decoration: const BoxDecoration(
                   // color: Colors.teal,
@@ -50,23 +48,40 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           'https://mytraining.global/app/uploads/2021/07/Icon-Comp.png'))),
             ),
             const SizedBox(
-              height: 40,
+              height: 30,
             ),
-            Padding(
-                padding: MediaQuery.of(context).padding,
-                child: Text(
-                  "Read our Privacy Policy Tap Agree and continue to accept the Terms of Services ",
-                  style: CustomizedTextStyle.welcome,
-                  textAlign: TextAlign.center,
-                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.check_box_outline_blank_sharp,
+                      color: Colors.white70,
+                    )),
+                const SizedBox(
+                  height: 40,
+                  width: 270,
+                  child: Text(
+                    "Read our Privacy Policy Tap Agree and continue to accept the Terms of Services ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(
-              height: 70,
+              height: 40,
             ),
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return LogIn();
+                    return const LogIn();
                   }));
                 },
                 // style: ElevatedButton.styleFrom(
@@ -81,17 +96,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   backgroundColor: MaterialStateProperty.all<Color>(
                       Colors.tealAccent.shade400),
                   fixedSize:
-                      MaterialStateProperty.all<Size>(const Size(310, 60)),
+                      MaterialStateProperty.all<Size>(const Size(260, 50)),
                 ),
                 child: const Text("AGREE & CONTINUE",
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto-Bold',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      // fontFamily: 'Roboto-Bold',
                       color: Colors.black,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 1,
-                      wordSpacing: 2.0,
+                      // fontStyle: FontStyle.normal,
+                      // letterSpacing: 1,
+                      // wordSpacing: 2.0,
                     )))
           ],
         )),

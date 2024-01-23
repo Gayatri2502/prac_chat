@@ -66,12 +66,77 @@ class StatusScreen extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNf55nkZRCxpvCxh3r50NdoAzf0qAf_9QwIZvDdCAMhg&usqp=CAU&ec=48665699"),
-                    ),
+                        radius: 30, backgroundImage: AssetImage("")),
                     title: const Text(
                       "Gayatri Samal",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text("Today, 20:16 PM"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoryPageView())),
+                  ),
+                  ListTile(
+                    leading: const CircleAvatar(
+                        radius: 30, backgroundImage: AssetImage("")),
+                    title: const Text(
+                      "Harshada",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text("Today, 20:16 PM"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoryPageView())),
+                  ),
+                  ListTile(
+                    leading: const CircleAvatar(
+                        radius: 30, backgroundImage: AssetImage("")),
+                    title: const Text(
+                      "Shreya mali",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text("Today, 20:16 PM"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoryPageView())),
+                  ),
+                  ListTile(
+                    leading: const CircleAvatar(
+                        radius: 30, backgroundImage: AssetImage("")),
+                    title: const Text(
+                      "Shreyas Chavan",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text("Today, 20:16 PM"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoryPageView())),
+                  ),
+                  ListTile(
+                    leading: const CircleAvatar(
+                        radius: 30, backgroundImage: AssetImage("")),
+                    title: const Text(
+                      "Sumeet Kaur",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text("Today, 20:16 PM"),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoryPageView())),
+                  ),
+                  ListTile(
+                    leading: const CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(""),
+                      foregroundImage: AssetImage(" "),
+                    ),
+                    title: const Text(
+                      "Abhisekh kumar",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: const Text("Today, 20:16 PM"),

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, depend_on_referenced_packages
+
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +13,7 @@ import '../../Models/user_model.dart';
 class NewMessages extends StatefulWidget {
   final String channelId;
 
-  NewMessages({Key? key, required this.channelId}) : super(key: key);
+  const NewMessages({Key? key, required this.channelId}) : super(key: key);
 
   @override
   State<NewMessages> createState() => _NewMessagesState();
@@ -21,10 +23,7 @@ class _NewMessagesState extends State<NewMessages> {
   final _controller = TextEditingController();
   late DateTime date;
 
-
-
-
-  void _sendMessage(MessageModel mesg) async {
+  void _sendMessage(MessageModel mesg, UserModel user) async {
     FocusScope.of(context).unfocus();
 
     print("mesg is being added");
@@ -66,7 +65,7 @@ class _NewMessagesState extends State<NewMessages> {
                   fontWeight: FontWeight.bold,
                 ),
                 filled: true,
-                fillColor: Colors.grey.shade300,
+                fillColor: Colors.white,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide.none),
@@ -91,14 +90,27 @@ class _NewMessagesState extends State<NewMessages> {
                       UserModel.fromJson(jsonDecode(jsonEncode(value.data())));
                   var uuid = const Uuid();
                   var newMesgID = uuid.v4();
-                  _sendMessage(MessageModel(
-                    mesgId: newMesgID,
-                    message: _controller.text,
-                    imageLink: '',
-                    sentAt: DateTime.now(),
-                    sentBy: currentUser,
-                    seenBy: [currentUser],
-                  ));
+                  _sendMessage(
+                      MessageModel(
+                        mesgId: newMesgID,
+                        message: _controller.text,
+                        imageLink: '',
+                        sentAt: DateTime.now(),
+                        sentBy: currentUser,
+                        seenBy: [currentUser],
+                      ),
+                      UserModel(
+                          userID: currentUser.userID,
+                          email: currentUser.email,
+                          phoneNumber: currentUser.phoneNumber,
+                          name: currentUser.name,
+                          password: currentUser.password,
+                          bio: currentUser.bio,
+                          photo: currentUser.photo,
+                          createdAT: currentUser.createdAT,
+                          isOnline: currentUser.isOnline,
+                          lastActive: currentUser.lastActive,
+                          pushToken: currentUser.pushToken));
                 });
               },
               icon: const Icon(

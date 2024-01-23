@@ -4,14 +4,14 @@ class CustomizedTextStyle {
   static TextStyle welcome = const TextStyle(
     fontFamily: 'Roboto-Black',
     fontWeight: FontWeight.w700,
-    fontSize: 15,
+    fontSize: 10,
     color: Colors.white,
     fontStyle: FontStyle.normal,
   );
 
   static TextStyle regular = const TextStyle(
     fontWeight: FontWeight.w700,
-    fontSize: 22,
+    fontSize: 28,
     color: Colors.white,
     fontStyle: FontStyle.normal,
   );

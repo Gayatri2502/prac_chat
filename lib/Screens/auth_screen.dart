@@ -1,12 +1,13 @@
-import "package:flutter/material.dart";
+// ignore_for_file: must_be_immutable
 
+import "package:flutter/material.dart";
 import "package:prac_chat/Widgets/Authentication/login.dart";
 
 import "../Models/user_model.dart";
 
 class AuthScreen extends StatefulWidget {
   AuthScreen({Key? key, required this.currentUser}) : super(key: key);
-  UserModel currentUser ;
+  UserModel currentUser;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -14,8 +15,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   //final _auth = FirebaseAuth.instance;
-  var isLoading = false;
-
 
   // Future<void> _submitAuthForm(String userName, String userEmail,
   //     String userPassword, bool isLogin, BuildContext ctx) async {
@@ -60,7 +59,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.teal.shade900,
-      body: LogIn(),
+      body: const LogIn(),
     );
   }
 }

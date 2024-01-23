@@ -2,22 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prac_chat/Models/user_model.dart';
+import 'package:prac_chat/Models/group_model.dart';
 
-import '../../Screens/chat_screen.dart';
-
-class UserChatCards extends StatefulWidget {
-  const UserChatCards({
+class GroupChatCard extends StatefulWidget {
+  const GroupChatCard({
     Key? key,
     required this.user,
   }) : super(key: key);
 
-  final UserModel user;
+  final GroupModel user;
   @override
-  State<UserChatCards> createState() => _UserChatCardsState();
+  State<GroupChatCard> createState() => _GroupChatCardState();
 }
 
-class _UserChatCardsState extends State<UserChatCards> {
+class _GroupChatCardState extends State<GroupChatCard> {
+  List<GroupModel> groupList = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -35,22 +34,22 @@ class _UserChatCardsState extends State<UserChatCards> {
             width: MediaQuery.of(context).size.width * 0.125,
             height: MediaQuery.of(context).size.height * 0.15,
             fit: BoxFit.fill,
-            imageUrl: widget.user.photo,
+            imageUrl: widget.user.groupPic!,
             // placeholder: (context, url) => const CircularProgressIndicator(),
             errorWidget: (context, url, error) => const Icon(
-              CupertinoIcons.person_crop_circle_fill,
-              size: 50,
+              CupertinoIcons.group_solid,
+              size: 30,
               color: Colors.black12,
             ),
           ),
         ),
         title: Text(
-          widget.user.name,
+          "${widget.user.groupName}",
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16),
         ),
         subtitle: Text(
-          widget.user.bio,
+          widget.user.members.join(', '),
           maxLines: 1,
         ),
         trailing: const Text(
@@ -58,11 +57,11 @@ class _UserChatCardsState extends State<UserChatCards> {
           style: TextStyle(color: Colors.black54),
         ),
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return ChatScreen(
-              user: widget.user,
-            );
-          }));
+          // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          //   return GroupCardScreen(
+          //     user: widget.user,
+          //   );
+          // }));
         },
       )),
     );

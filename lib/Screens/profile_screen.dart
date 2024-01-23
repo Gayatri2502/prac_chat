@@ -1,18 +1,20 @@
+// ignore_for_file: avoid_print, unnecessary_const, non_constant_identifier_names, unused_field, duplicate_ignore
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prac_chat/Widgets/Services/auth_services.dart';
+
 import '../Models/user_model.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({
+  const ProfileScreen({
     Key? key,
 
     //  required this.userData,
   }) : super(key: key);
-
 
   //UserModel user;
 
@@ -27,9 +29,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
+  // ignore: unused_field
   bool _isLoading = false;
   AuthServices info = AuthServices();
-
 
   // @override
   // void initState() {
@@ -51,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .collection("Users")
         .doc(Auth.currentUser!.uid)
         .set({
-      "Name" : _userNameController.text,
+      "Name": _userNameController.text,
       "PhoneNumber": _userPhotoController.text,
       "Bio": _userBioController.text,
       "Photo": _userPhotoController,
@@ -75,7 +77,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal.shade900,
-        title: const Text('Profile'),
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white),
+        ),
+        automaticallyImplyLeading: false,
         leading: const Icon(Icons.arrow_back),
         actions: [
           IconButton(
@@ -85,24 +91,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: const Icon(Icons.save, color: Colors.white, size: 30))
         ],
       ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.35,
-            vertical: MediaQuery.of(context).size.height * 0.15),
-        child: FloatingActionButton.extended(
-            onPressed: () async {
-              // Dialogs.showProgressBar(context);
-              // await authServices
-              //     .signOut()
-              //     .then((value) => Navigator.of(context).pop());
-            },
-            shape: const StadiumBorder(),
-            backgroundColor: Colors.teal,
-            icon: const Icon(
-              Icons.logout,
-            ),
-            label: const Text('Logout')),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: EdgeInsets.symmetric(
+      //       horizontal: MediaQuery.of(context).size.width * 0.35,
+      //       vertical: MediaQuery.of(context).size.height * 0.15),
+      //   child: FloatingActionButton.extended(
+      //       onPressed: () async {
+      //         // Dialogs.showProgressBar(context);
+      //         // await authServices
+      //         //     .signOut()
+      //         //     .then((value) => Navigator.of(context).pop());
+      //       },
+      //       shape: const StadiumBorder(),
+      //       backgroundColor: Colors.teal,
+      //       icon: const Icon(
+      //         Icons.logout,
+      //       ),
+      //       label: const Text('Logout')),
+      // ),
       body: StreamBuilder(
           stream: firestore
               .collection('Users')
@@ -189,8 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           labelText: ('Name'),
                           hintText: ('eg. Alex'),
-                          helperText:
-                              'This is not your username or pin.this name will be visible\nto your WhatsApp contacts.'),
+                          helperText: 'This is not your username. '),
                     ),
                     SizedBox(
                         height: MediaQuery.of(context).size.height * 0.0035),
@@ -250,6 +255,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         labelText: ('Phone Number'),
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal),
+                        onPressed: () {},
+                        child: const Text(
+                          "Logout",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                        ))
                   ],
                 ),
               ),

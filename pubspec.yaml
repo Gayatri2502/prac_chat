@@ -40,14 +40,20 @@ dependencies:
   firebase_core: ^2.8.0
   firebase_auth: ^4.4.0
   shared_preferences: ^2.1.0
-  cached_network_image: ^3.2.3
-  story_view: ^0.14.0
   camera: ^0.10.5
+  cached_network_image: ^3.3.1
+  story_view: ^0.16.0
+  quickalert: ^1.0.2
+  widget_loading: ^0.3.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: ^0.13.1
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/whatsapp_icon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -68,8 +74,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-assets:
-  - images/
+  assets:
+    - images/
+    - images/wallpaper.jpg
+    - assets/
+    - assets/wallpaper.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
